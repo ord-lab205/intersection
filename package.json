@@ -1,0 +1,32 @@
+{
+  "name": "intersection",
+  "version": "1.0.0",
+  "description": "교차로 부착 아두이노 시리얼 데이터 가공 및 저장",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/index.js",
+    "build": "webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ord-lab205/intersection.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ord-lab205/intersection/issues"
+  },
+  "homepage": "https://github.com/ord-lab205/intersection#readme",
+  "dependencies": {
+    "dotenv": "^12.0.4",
+    "oracledb": "^5.3.0",
+    "serialport": "^9.2.8"
+  },
+  "devDependencies": {
+    "webpack": "^5.66.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
