@@ -2,6 +2,7 @@ const oracledb = require("oracledb");
 const config__oracle_info = require("../config/oracle");
 
 const COMMON_XE_TABLE = "general";
+const THIS_ENV_TYPE = "intersection";
 const arr_columns__common_sensor_types = [
   "vibration_1_val",
   "vibration_2_val",
@@ -20,7 +21,7 @@ const obj_option__bind_defs = arr_column_params.reduce(
 );
 
 const TUNNEL_COLUMNS = arr_columns__sensor_type__tunnel.join();
-const DML_INSERT__SQL_QUERY = `INSERT INTO ${COMMON_XE_TABLE} (${TUNNEL_COLUMNS}) VALUES (${arr_column_params})`;
+const DML_INSERT__SQL_QUERY = `INSERT INTO ${COMMON_XE_TABLE} (${THIS_ENV_TYPE},${TUNNEL_COLUMNS}) VALUES (${arr_column_params})`;
 const DML_ISNERT__OPTIONS = {
   autoCommit: true,
   bindDefs: obj_option__bind_defs,
