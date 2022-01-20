@@ -1,26 +1,22 @@
 const oracledb = require("oracledb");
 const config__oracle_info = require("../config/oracle");
 
-const COMMON_XE_TABLE = "general";
-const arr_columns__common_sensor_types = [
-  "vibration_1_val",
-  "vibration_2_val",
-  "vibration_3_val",
-  "noise_1_val",
-  "noise_2_val",
-  "noise_3_val",
-];
-const arr_columns__sensor_type__tunnel = [...arr_columns__common_sensor_types];
-const arr_column_params = arr_columns__sensor_type__tunnel.map((el, i) => {
-  return `VAL${i}`;
+const XE_COMMON_TABLE = process.env.XE_COMMON_TABLE;
+const SECTION_ID = process.env.SECTION_ID;
+const FACTOR_TYPE = process.env.FACTOR_TYPE;
+
+const str_columns__section_sensor_types = process.env.XE_SECTION_COLUMNS;
+const arr_columns__section_sensor_types =
+  str_columns__section_sensor_types.split(",");
+const arr_column_params = arr_columns__section_sensor_types.map((el, i) => {
+  return `:VAL${++i}`;
 });
 const obj_option__bind_defs = arr_column_params.reduce(
   (obj, t) => ((obj[t] = { type: oracledb.DB_TYPE_NUMBER }), obj),
   {}
 );
 
-const TUNNEL_COLUMNS = arr_columns__sensor_type__tunnel.join();
-const DML_INSERT__SQL_QUERY = `INSERT INTO ${COMMON_XE_TABLE} (${TUNNEL_COLUMNS}) VALUES (${arr_column_params})`;
+const DML_INSERT__SQL_QUERY = `INSERT INTO ${XE_COMMON_TABLE} (id, section_id, factor_type, ${str_columns__section_sensor_types}, occured_at) VALUES (${XE_COMMON_TABLE}_seq.NEXTVAL,'${SECTION_ID}','${FACTOR_TYPE}',${arr_column_params},SYSDATE)`;
 const DML_ISNERT__OPTIONS = {
   autoCommit: true,
   bindDefs: obj_option__bind_defs,
@@ -33,11 +29,11 @@ module.exports = {
     this.conn = await oracledb.getConnection();
   },
 
-  fn_oper__at_termination() {
+  async fn_oper__at_termination() {
     try {
       if (this.conn) {
         conn.close().then(() => {
-          oracledb.getPool().close(10);
+          await oracledb.getPool().close(10);
           process.exit(0);
         });
       }
